@@ -1,3 +1,4 @@
+const api = 'https://withlove-wroclaw.store';
 const tg = window.Telegram.WebApp;
 
 tg.expand();
@@ -13,8 +14,20 @@ let selected;
 
 attachEvents();
 
-Telegram.WebApp.onEvent('mainButtonClicked', () => {
-    tg.sendData(selected);
+tg.onEvent('mainButtonClicked', async () => {
+    const response = await fetch(`${api}/order`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+            selected: selected
+        })
+    });
+
+    const result = await response.json();
+
+    console.warn('> result', result);
 });
 
 
